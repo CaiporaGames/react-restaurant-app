@@ -57,3 +57,14 @@ export const useLastOrder = () => {
   const orders = useOrders();
   return orders.length ? orders[orders.length - 1] : null;
 };
+/** Sum of all placed orders (amount the guest already owes) */
+export const useOrdersDueSummary = () => {
+  const orders = useOrders();
+  return useMemo(() => {
+    const openOrders = orders.filter((o) => o.status === "placed");
+    const dueCents = openOrders.reduce((acc, o) => acc + o.totalCents, 0);
+    const currency = openOrders[0]?.currency ?? "EUR";
+    const count = openOrders.length;
+    return { dueCents, count, currency };
+  }, [orders]);
+};

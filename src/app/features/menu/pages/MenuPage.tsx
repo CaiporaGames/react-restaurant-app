@@ -1,6 +1,7 @@
 "use client";
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useMenu, useCartSummary } from "@/app/features/store";
+import { useOrdersDueSummary } from "@/app/features/store"; // <-- import
 import { DishCard } from "@/app/features/menu/components/DishCard";
 import { DishModal } from "@/app/features/menu/components/DishModal";
 import type { MenuItem } from "@/app/domain/menu";
@@ -14,12 +15,12 @@ import "./MenuPage.css";
 export default function MenuPage() {
   const categories = useMenu();
   const sortedCats = useMemo(() => [...categories].sort((a, b) => a.sort - b.sort), [categories]);
-  const { totalCents, totalQty } = useCartSummary();
+
+  const { totalCents, totalQty } = useCartSummary();     // current cart total
+  const { dueCents, currency: dueCurrency } = useOrdersDueSummary(); // amount already owed
 
   const [modalItem, setModalItem] = useState<MenuItem | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
-
-  // Track open/closed sections as a Set of IDs
   const [openSet, setOpenSet] = useState<Set<string>>(new Set());
 
   const toggle = useCallback((id: string) => {
@@ -40,7 +41,6 @@ export default function MenuPage() {
         </div>
       </header>
 
-      {/* Collapsible sections with on-demand items */}
       <div style={{ display: "grid", gap: 12 }}>
         {sortedCats.map(cat => (
           <CollapsibleSection<MenuItem>
@@ -51,18 +51,16 @@ export default function MenuPage() {
             open={openSet.has(cat.id)}
             onToggle={toggle}
             items={cat.items}
-            batchSize={8} // tweak if needed
+            batchSize={8}
             getKey={(it) => it.id}
-            renderItem={(it) => (
-              <DishCard item={it} onOpen={setModalItem} />
-            )}
+            renderItem={(it) => <DishCard item={it} onOpen={setModalItem} />}
           />
         ))}
       </div>
 
       {modalItem && <DishModal item={modalItem} onClose={() => setModalItem(null)} />}
 
-      {/* Sticky bottom bar with 🛒 */}
+      {/* Sticky bottom bar: cart + Current + Due */}
       <div className="menuPage__totalBar">
         <button
           className="cartBtn"
@@ -72,7 +70,18 @@ export default function MenuPage() {
         >
           🛒 <span className="cartBtn__qty">{totalQty}</span>
         </button>
-        <div style={{ fontWeight: 700 }}>{formatMoney(totalCents)}</div>
+
+        <div className="menuPage__totals">
+          <div className="totalBlock">
+            <span className="totalBlock__label">Current</span>
+            <strong className="totalBlock__value">{formatMoney(totalCents)}</strong>
+          </div>
+
+          <div className="totalBlock">
+            <span className="totalBlock__label">Due</span>
+            <strong className="totalBlock__value">{formatMoney(dueCents, dueCurrency)}</strong>
+          </div>
+        </div>
       </div>
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
