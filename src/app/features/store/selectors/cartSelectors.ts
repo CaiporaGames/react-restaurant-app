@@ -47,3 +47,13 @@ export const useCartDetailed = () => {
     });
   }, [lines, categories]);
 };
+
+export const useOrderActions = () => ({
+  placeOrder: () => useRootStore.getState().placeOrder(),
+});
+
+export const useOrders = () => useRootStore((s) => s.orders);
+export const useLastOrder = () => {
+  const orders = useOrders();
+  return orders.length ? orders[orders.length - 1] : null;
+};

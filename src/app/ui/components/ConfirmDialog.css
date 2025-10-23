@@ -1,0 +1,14 @@
+.cd { position: fixed; inset: 0; z-index: 60; }
+.cd__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.45); }
+.cd__panel {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(520px, 92%);
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+  box-shadow: var(--shadow);
+}
+.cd__title { margin: 0 0 6px; font-weight: 800; }
+.cd__msg { margin: 0 0 14px; color: var(--muted); }
+.cd__actions { display:flex; gap: 10px; justify-content: flex-end; }
+.btn { padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
+.btn--primary { background: var(--primary); color: #fff; border-color: var(--primary); }

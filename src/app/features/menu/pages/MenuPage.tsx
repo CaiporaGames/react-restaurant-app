@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { useMenu, useCartSummary } from "@/app/features/store";
 import { DishCard } from "@/app/features/menu/components/DishCard";
 import { DishModal } from "@/app/features/menu/components/DishModal";
@@ -8,13 +8,27 @@ import { formatMoney } from "@/app/domain/common";
 import LanguageToggle from "@/app/ui/components/LanguageToggle";
 import ThemeToggle from "@/app/ui/components/ThemeToggle";
 import CartDrawer from "@/app/features/cart/components/CartDrawer";
+import CollapsibleSection from "@/app/features/menu/components/CollapsibleSection";
 import "./MenuPage.css";
 
 export default function MenuPage() {
   const categories = useMenu();
+  const sortedCats = useMemo(() => [...categories].sort((a, b) => a.sort - b.sort), [categories]);
   const { totalCents, totalQty } = useCartSummary();
-  const [open, setOpen] = useState<MenuItem | null>(null);
+
+  const [modalItem, setModalItem] = useState<MenuItem | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
+
+  // Track open/closed sections as a Set of IDs
+  const [openSet, setOpenSet] = useState<Set<string>>(new Set());
+
+  const toggle = useCallback((id: string) => {
+    setOpenSet(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
 
   return (
     <div className="menuPage">
@@ -26,18 +40,27 @@ export default function MenuPage() {
         </div>
       </header>
 
-      {categories.sort((a,b) => a.sort - b.sort).map(cat => (
-        <section key={cat.id} className="menuPage__section">
-          <h2 className="menuPage__sectionTitle">{cat.name}</h2>
-          <div className="menuPage__grid">
-            {cat.items.map(it => (
-              <DishCard key={it.id} item={it} onOpen={setOpen} />
-            ))}
-          </div>
-        </section>
-      ))}
+      {/* Collapsible sections with on-demand items */}
+      <div style={{ display: "grid", gap: 12 }}>
+        {sortedCats.map(cat => (
+          <CollapsibleSection<MenuItem>
+            key={cat.id}
+            id={cat.id}
+            title={cat.name}
+            count={cat.items.length}
+            open={openSet.has(cat.id)}
+            onToggle={toggle}
+            items={cat.items}
+            batchSize={8} // tweak if needed
+            getKey={(it) => it.id}
+            renderItem={(it) => (
+              <DishCard item={it} onOpen={setModalItem} />
+            )}
+          />
+        ))}
+      </div>
 
-      {open && <DishModal item={open} onClose={() => setOpen(null)} />}
+      {modalItem && <DishModal item={modalItem} onClose={() => setModalItem(null)} />}
 
       {/* Sticky bottom bar with 🛒 */}
       <div className="menuPage__totalBar">
@@ -49,7 +72,6 @@ export default function MenuPage() {
         >
           🛒 <span className="cartBtn__qty">{totalQty}</span>
         </button>
-
         <div style={{ fontWeight: 700 }}>{formatMoney(totalCents)}</div>
       </div>
 

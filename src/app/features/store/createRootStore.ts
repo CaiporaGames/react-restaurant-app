@@ -22,8 +22,9 @@ export const useRootStore = create<RootState>()(
           locale: state.locale,
           themeMode: state.themeMode,
           lines: state.lines, // ← remove this line if you don't want cart persistence
+          orders: state.orders,
         }),
-        version: 2,
+        version: 3,
       }
     )
   )

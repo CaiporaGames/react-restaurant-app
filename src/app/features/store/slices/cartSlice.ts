@@ -1,22 +1,38 @@
 import { MenuItem } from "@/app/domain/menu";
 
-// CART SLICE
+/* ---------- TYPES ---------- */
 export interface CartLine {
   itemId: string;
   qty: number;
   priceCents: number;
+  currency: string;     // ✅ keep currency per line
   name: string;
 }
+
+export interface PlacedOrder {
+  id: string;
+  items: CartLine[];    // snapshot at order time
+  totalCents: number;
+  currency: string;
+  createdAt: string;    // ISO
+  status: "placed";
+}
+
+/* ---------- CART SLICE ---------- */
 export interface CartState {
-  lines: Record<string, CartLine>; // key=itemId
-  add(item: MenuItem): void;
-  dec(itemId: string): void;
-  setQty(item: MenuItem, qty: number): void;
-  clear(): void;
+  lines: Record<string, CartLine>;
+  orders: PlacedOrder[];                  // ✅ history of finalized orders
+  add: (item: MenuItem) => void;
+  dec: (itemId: string) => void;
+  setQty: (item: MenuItem, qty: number) => void;
+  clear: () => void;
+  placeOrder: () => void;                 // ✅ finalize current cart
 }
 
 export const createCartSlice = (set: any, get: any): CartState => ({
   lines: {},
+  orders: [],
+
   add: (item) => {
     const key = item.id;
     set((state: CartState) => {
@@ -29,13 +45,15 @@ export const createCartSlice = (set: any, get: any): CartState => ({
             itemId: key,
             qty: nextQty,
             priceCents: item.price.priceCents,
-            name: item.name_en, // currently localized name
+            currency: item.price.currency,   // ✅ record currency
+            name: item.name_en,              // already localized display name
           },
         },
       };
     });
   },
-   dec: (itemId) => {
+
+  dec: (itemId) => {
     set((state: CartState) => {
       const prev = state.lines[itemId];
       if (!prev) return { lines: state.lines };
@@ -58,6 +76,7 @@ export const createCartSlice = (set: any, get: any): CartState => ({
           itemId: key,
           qty,
           priceCents: item.price.priceCents,
+          currency: item.price.currency,     // ✅ record currency
           name: item.name_en,
         };
       }
@@ -66,4 +85,27 @@ export const createCartSlice = (set: any, get: any): CartState => ({
   },
 
   clear: () => set({ lines: {} }),
+
+  // ✅ Finalize the current cart into an immutable order and start a fresh cart
+  placeOrder: () => {
+    set((state: CartState) => {
+      const items = Object.values(state.lines);
+      if (items.length === 0) return {}; // nothing to place
+
+      const totalCents = items.reduce((a, l) => a + l.qty * l.priceCents, 0);
+      const currency = items[0]?.currency ?? "EUR";
+      const order: PlacedOrder = {
+        id: `ord_${Date.now()}`,
+        items,
+        totalCents,
+        currency,
+        createdAt: new Date().toISOString(),
+        status: "placed",
+      };
+      return {
+        orders: [...state.orders, order],
+        lines: {}, // ✅ new selections start a brand-new list
+      };
+    });
+  },
 });
