@@ -1,0 +1,4 @@
+@import "./ThemeToggle.css";  /* reuse .seg styles */
+
+.seg--withlabel { gap: 10px; }
+.seg__label { opacity: 0.7; }

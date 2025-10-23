@@ -1,0 +1,70 @@
+.menuPage {
+  min-height: 100svh;         /* full viewport height on mobile */
+  background: var(--page-bg); /* reacts to theme */
+  padding: 16px;
+  padding-bottom: 88px;       /* space for sticky total bar */
+}
+
+.menuPage__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.menuPage__title {
+  font-size: 28px;
+  font-weight: 800;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.menuPage__actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.menuPage__section {
+  margin: 18px 0 24px;
+}
+
+.menuPage__sectionTitle {
+  margin: 12px 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.menuPage__grid {
+  display: grid;
+  gap: 12px;
+}
+
+.menuPage__totalBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--surface-strong);
+  color: var(--text);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+.cartBtn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+.cartBtn__qty {
+  min-width: 22px; height: 22px; border-radius: 999px;
+  display: inline-grid; place-items: center;
+  background: var(--primary); color: #fff; font-size: 12px; padding: 0 6px;
+}

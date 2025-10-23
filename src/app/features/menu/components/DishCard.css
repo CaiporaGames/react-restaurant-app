@@ -1,0 +1,14 @@
+.dish {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);     /* was #eee */
+  border-radius: 14px;
+  background: var(--surface);          /* was #fff */
+  box-shadow: var(--shadow);
+}
+.dish__photo { width:96px; height:96px; object-fit:cover; border-radius:12px; }
+.dish__title { font-weight: 600; margin-bottom: 4px; color: var(--text); }
+.dish__price { color: var(--primary); font-weight: 700; }
+.dish__actions { margin-top: 8px; }

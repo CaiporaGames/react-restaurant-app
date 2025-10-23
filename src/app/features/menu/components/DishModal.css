@@ -1,0 +1,17 @@
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: grid; place-items: center; padding: 16px; }
+.modal__card {
+  background: var(--surface);          /* was #fff */
+  color: var(--text);
+  width: min(720px, 100%);
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+.modal__close { position: absolute; top: 6px; right: 10px; font-size: 24px; border: none; background: none; color: var(--text); }
+.modal__photo { width:100%; max-height:280px; object-fit:cover; border-radius: 12px; }
+.modal__row { display:flex; justify-content:space-between; align-items:center; margin:12px 0; }
+.modal__price { font-size:20px; font-weight:700; color: var(--primary); }
+.modal__desc { opacity: .9; }
+.modal__allergens { font-size:14px; color: var(--muted); }

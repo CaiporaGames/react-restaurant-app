@@ -1,0 +1,101 @@
+{
+  "currency": "EUR",
+  "categories": [
+    {
+      "id": "c1",
+      "name_en": "Starters",
+      "name_pt": "Entradas",
+      "sort": 1,
+      "items": [
+        {
+          "id": "i1",
+          "category_id": "c1",
+          "name_en": "Bruschetta",
+          "name_pt": "Bruschetta",
+          "description_en": "Tomato, basil, olive oil on toasted bread.",
+          "description_pt": "Tomate, manjericão e azeite no pão tostado.",
+          "photo_url": "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop",
+          "price": { "priceCents": 550, "currency": "EUR" },
+          "is_active": true,
+          "allergens": ["GLUTEN"]
+        },
+        {
+          "id": "i2",
+          "category_id": "c1",
+          "name_en": "Pumpkin Soup",
+          "name_pt": "Sopa de Abóbora",
+          "description_en": "Creamy, with roasted seeds.",
+          "description_pt": "Cremosa, com sementes tostadas.",
+          "photo_url": "https://plus.unsplash.com/premium_photo-1669559809094-1d6942e1531e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=687",
+          "price": { "priceCents": 480, "currency": "EUR" },
+          "is_active": true,
+          "allergens": []
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "name_en": "Mains",
+      "name_pt": "Pratos",
+      "sort": 2,
+      "items": [
+        {
+          "id": "i3",
+          "category_id": "c2",
+          "name_en": "Grilled Salmon",
+          "name_pt": "Salmão Grelhado",
+          "description_en": "With lemon butter and greens.",
+          "description_pt": "Com manteiga de limão e legumes.",
+          "photo_url": "https://plus.unsplash.com/premium_photo-1723478417559-2349252a3dda?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1066",
+          "price": { "priceCents": 1450, "currency": "EUR" },
+          "is_active": true,
+          "allergens": ["FISH"]
+        },
+        {
+          "id": "i4",
+          "category_id": "c2",
+          "name_en": "Penne Arrabbiata",
+          "name_pt": "Penne Arrabbiata",
+          "description_en": "Spicy tomato sauce, garlic, parsley.",
+          "description_pt": "Molho de tomate picante, alho e salsa.",
+          "photo_url": "https://images.unsplash.com/photo-1526318472351-c75fcf070305?q=80&w=1200&auto=format&fit=crop",
+          "price": { "priceCents": 990, "currency": "EUR" },
+          "is_active": true,
+          "allergens": ["GLUTEN"]
+        },
+        {
+          "id": "i5",
+          "category_id": "c2",
+          "name_en": "Veggie Burger",
+          "name_pt": "Hambúrguer Vegetariano",
+          "description_en": "Chickpea patty, lettuce, tomato.",
+          "description_pt": "Hambúrguer de grão, alface e tomate.",
+          "photo_url": "https://images.unsplash.com/photo-1561758033-d89a9ad46330?q=80&w=1200&auto=format&fit=crop",
+          "price": { "priceCents": 1150, "currency": "EUR" },
+          "is_active": true,
+          "allergens": []
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "name_en": "Desserts",
+      "name_pt": "Sobremesas",
+      "sort": 3,
+      "items": [
+        {
+          "id": "i6",
+          "category_id": "c3",
+          "name_en": "Chocolate Mousse",
+          "name_pt": "Mousse de Chocolate",
+          "description_en": "70% cocoa, whipped cream.",
+          "description_pt": "70% cacau, natas batidas.",
+          "photo_url": "https://plus.unsplash.com/premium_photo-1674176787609-82eb81bea0d8?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2070",
+          "price": { "priceCents": 620, "currency": "EUR" },
+          "is_active": true,
+          "allergens": ["EGG", "MILK"]
+        }
+      ]
+    }
+  ]
+}

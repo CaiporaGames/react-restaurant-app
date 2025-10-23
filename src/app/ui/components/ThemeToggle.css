@@ -1,0 +1,13 @@
+.seg { display:flex; gap:8px; align-items:center; }
+.seg__btn {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.seg__btn.is-active {
+  background: var(--card);
+  border-color: var(--primary);
+  font-weight: 600;
+}
