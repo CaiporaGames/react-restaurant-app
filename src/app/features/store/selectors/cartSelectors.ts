@@ -2,6 +2,54 @@
 import { useMemo } from "react";
 import { useRootStore } from "@/app/features/store/createRootStore";
 import { useMenu } from "./menuSelectors";
+export const useOrders = () => useRootStore((s) => s.orders);
+
+/** Rows for the “Due” drawer: aggregated across all placed orders */
+export const useDueItemsDetailed = () => {
+  const orders = useOrders();
+  const categories = useMenu();
+
+  return useMemo(() => {
+    // Build a quick index itemId -> menu item (to fetch image)
+    const menuIndex = new Map<string, any>();
+    categories.forEach((c) => c.items.forEach((it) => menuIndex.set(it.id, it)));
+
+    // Aggregate lines across all placed orders
+    const acc = new Map<string, {
+      id: string;
+      name: string;
+      photo_url?: string;
+      qty: number;
+      unitCents: number;
+      subtotalCents: number;
+      currency: string;
+    }>();
+
+    orders.filter(o => o.status === "placed").forEach(o => {
+      o.items.forEach(l => {
+        const k = l.itemId;
+        const existing = acc.get(k);
+        const item = menuIndex.get(k);
+        if (existing) {
+          existing.qty += l.qty;
+          existing.subtotalCents += l.qty * l.priceCents;
+        } else {
+          acc.set(k, {
+            id: k,
+            name: l.name,                   // snapshot name at order time
+            photo_url: item?.photo_url,     // best effort
+            qty: l.qty,
+            unitCents: l.priceCents,
+            subtotalCents: l.qty * l.priceCents,
+            currency: l.currency || "EUR",
+          });
+        }
+      });
+    });
+
+    return Array.from(acc.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, [orders, categories]);
+};
 
 export const useCartLines = () => useRootStore(s => s.lines);
 
@@ -52,7 +100,6 @@ export const useOrderActions = () => ({
   placeOrder: () => useRootStore.getState().placeOrder(),
 });
 
-export const useOrders = () => useRootStore((s) => s.orders);
 export const useLastOrder = () => {
   const orders = useOrders();
   return orders.length ? orders[orders.length - 1] : null;

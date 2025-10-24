@@ -13,6 +13,7 @@ import CollapsibleSection from "@/app/features/menu/components/CollapsibleSectio
 import "./MenuPage.css";
 import SearchBar from "@/app/ui/components/SearchBar";
 import { useI18n } from "@/app/hooks/useI18n";
+import DueDrawer from "@/app/features/orders/components/DueDrawer";
 
 const normalize = (s: string) =>
   (s || "")
@@ -20,7 +21,9 @@ const normalize = (s: string) =>
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "");
 
-export default function MenuPage() {
+export default function MenuPage() 
+{
+  const [dueOpen, setDueOpen] = useState(false);
   const { locale } = useI18n();
   const categories = useMenu();
   const sortedCats = useMemo(() => [...categories].sort((a, b) => a.sort - b.sort), [categories]);
@@ -68,7 +71,7 @@ export default function MenuPage() {
   return (
     <div className="menuPage">
       <header className="menuPage__header">
-        <h1 className="menuPage__title">Menu</h1>
+        <h1 className="menuPage__title">Alentejo</h1>
         <div className="menuPage__actions">
           <LanguageToggle />
           <ThemeToggle />
@@ -121,14 +124,26 @@ export default function MenuPage() {
             <span className="totalBlock__label">{locale === "pt" ? "Atual" : "Current"}</span>
             <strong className="totalBlock__value">{formatMoney(totalCents)}</strong>
           </div>
-          <div className="totalBlock">
+      {/*     <div className="totalBlock">
             <span className="totalBlock__label">{locale === "pt" ? "Em dívida" : "Due"}</span>
             <strong className="totalBlock__value">{formatMoney(dueCents, dueCurrency)}</strong>
-          </div>
+          </div> */}
+
+           {/* Make Due clickable */}
+          <button
+            className="totalBlock totalBlock--button"
+            onClick={() => setDueOpen(true)}
+            aria-label={locale === "pt" ? "Ver itens já pedidos" : "View already ordered items"}
+            title={locale === "pt" ? "Ver itens já pedidos" : "View already ordered items"}
+          >
+            <span className="totalBlock__label">{locale === "pt" ? "Em dívida" : "Due"}</span>
+            <strong className="totalBlock__value">{formatMoney(dueCents, dueCurrency)}</strong>
+          </button>
         </div>
       </div>
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <DueDrawer open={dueOpen} onClose={() => setDueOpen(false)} />
     </div>
   );
 }
